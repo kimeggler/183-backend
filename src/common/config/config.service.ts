@@ -32,6 +32,13 @@ export class ConfigService {
   }
 
   /**
+   * The JWT secret
+   */
+  get secret(): string {
+    return this.envConfig.SECRET;
+  }
+
+  /**
    * The database host uri
    */
   get databaseHost(): string {
@@ -95,6 +102,7 @@ export class ConfigService {
         .default('development'),
       PORT: Joi.number().default(3000),
       APP_NAME: Joi.string().required(),
+      SECRET: Joi.string().required(),
       DATABASE_HOST: Joi.string().required(),
       DATABASE_USER: Joi.string().required(),
       DATABASE_PASSWORD: Joi.string().required(),
