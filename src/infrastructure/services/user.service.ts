@@ -10,9 +10,9 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-  
+
   public async findUserByEmail(email: string): Promise<User> {
-    return this.userRepository.findOneOrFail({where: {email}});
+    return this.userRepository.findOne({ where: { email } });
   }
 
   public async createUser(user: RegisterDTO): Promise<User> {

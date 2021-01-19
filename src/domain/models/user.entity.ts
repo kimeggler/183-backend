@@ -1,5 +1,6 @@
-import { DeepPartial, Entity, Column } from 'typeorm';
+import { DeepPartial, Entity, Column, ManyToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { Role } from './role.entity';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -19,6 +20,6 @@ export class User extends BaseEntity {
   @Column({ name: 'password' })
   public password: string;
 
-  @Column({ name: 'salt' })
-  public salt: string;
+  @ManyToMany((type) => Role, (role) => role.users)
+  public roles: Role[];
 }

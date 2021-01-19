@@ -1,5 +1,4 @@
 export interface LoginResponseDTO {
-  id: number,
-  email: string,
-  token: string
+  email: string;
+  token: string;
 }
