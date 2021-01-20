@@ -7,6 +7,7 @@ import { UserService } from './user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/domain/models/user.entity';
+import { JwtStrategy } from '../strategies/jwt.strategy';
 @Module({
   imports: [
     ConfigModule,
@@ -22,7 +23,7 @@ import { User } from 'src/domain/models/user.entity';
       }),
     }),
   ],
-  providers: [AuthService, UserService],
+  providers: [AuthService, UserService, JwtStrategy],
   exports: [AuthService],
 })
 export class ServiceModule {}

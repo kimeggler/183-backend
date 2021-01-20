@@ -14,7 +14,15 @@ export class AuthService {
   ) {}
 
   async generateToken(user: User): Promise<string> {
-    return await this.jwtService.sign({ user });
+    const payload = {
+      user: {
+        userName: `${user.firstname} ${user.lastname}`,
+        email: user.email,
+        roles: user.roles,
+      },
+      sub: user.id,
+    };
+    return await this.jwtService.sign(payload);
   }
 
   async toResponseObject(data: any): Promise<LoginResponseDTO> {
@@ -78,4 +86,8 @@ export class AuthService {
     const token = await this.generateToken(user);
     return this.toResponseObject({ ...user, token });
   }
+
+  // async me(token: string): Promise<UserResponseDTO> {
+  //   return this.toResponseObject({});
+  // }
 }
