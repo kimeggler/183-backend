@@ -6,11 +6,13 @@ import { RegisterDTO } from '../../domain/dto/register.dto';
 import { User } from '../../domain/models/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcryptjs';
+import { CustomLoggerService } from './logger.service';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly customLoggerService: CustomLoggerService,
   ) {}
 
   async generateToken(user: User): Promise<string> {
@@ -45,6 +47,9 @@ export class AuthService {
     const user = await this.userService.findUserByEmail(payload.email);
 
     if (!user) {
+      this.customLoggerService.log(
+        'Email used for login not found: ' + payload.email,
+      );
       throw new HttpException(
         'Invalide username or password',
         HttpStatus.BAD_REQUEST,
@@ -57,6 +62,9 @@ export class AuthService {
     );
 
     if (!correctPassword) {
+      this.customLoggerService.log(
+        'User credentials did not match: ' + payload.email,
+      );
       throw new HttpException(
         'Invalide username or password',
         HttpStatus.BAD_REQUEST,
@@ -64,6 +72,8 @@ export class AuthService {
     }
 
     const token = await this.generateToken(user);
+
+    this.customLoggerService.log('Logged in user with email: ' + payload.email);
     return this.toResponseObject({ ...user, token });
   }
 
@@ -72,6 +82,9 @@ export class AuthService {
     Logger.warn(user);
 
     if (user) {
+      this.customLoggerService.log(
+        'Attempted login using email: ' + payload.email,
+      );
       throw new HttpException(
         'There is an existin account using this email.',
         HttpStatus.BAD_REQUEST,
@@ -84,6 +97,10 @@ export class AuthService {
       password: hashedPassword,
     });
     const token = await this.generateToken(user);
+
+    this.customLoggerService.log(
+      'Registered and logged in user with email: ' + payload.email,
+    );
     return this.toResponseObject({ ...user, token });
   }
 

@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/domain/models/user.entity';
 import { JwtStrategy } from '../strategies/jwt.strategy';
+import { CustomLoggerService } from './logger.service';
 @Module({
   imports: [
     ConfigModule,
@@ -23,7 +24,7 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
       }),
     }),
   ],
-  providers: [AuthService, UserService, JwtStrategy],
-  exports: [AuthService],
+  providers: [AuthService, UserService, CustomLoggerService, JwtStrategy],
+  exports: [AuthService, CustomLoggerService],
 })
 export class ServiceModule {}
